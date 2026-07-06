@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dara Poultry — Telur Ayam Segar & Pakan Ternak | Ciamis</title>
+  <meta name="description" content="Dara Poultry adalah peternakan ayam petelur di Ciamis dengan 3.000+ ekor ayam yang memproduksi telur segar setiap hari. Kami juga menyediakan pakan ternak berkualitas." />
+  <meta name="theme-color" content="#F5B301" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Dara Poultry — Telur Ayam Segar Setiap Hari" />
+  <meta property="og:description" content="Peternakan ayam petelur dengan 3.000+ ekor ayam. Telur segar & pakan ternak berkualitas dari Ciamis." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='50' cy='55' rx='30' ry='38' fill='%23F5B301'/%3E%3Cellipse cx='42' cy='42' rx='9' ry='12' fill='%23fff' opacity='.55'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#hero" class="brand" aria-label="Dara Poultry beranda">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="34" height="34">
+            <ellipse cx="24" cy="27" rx="15" ry="19" fill="#F5B301"/>
+            <ellipse cx="19" cy="20" rx="4.5" ry="6" fill="#fff" opacity=".6"/>
+          </svg>
+        </span>
+        <span class="brand__text">Dara<span>Poultry</span></span>
+      </a>
+
+      <nav class="nav__links" id="navLinks" aria-label="Navigasi utama">
+        <a href="#tentang">Tentang</a>
+        <a href="#produk">Produk</a>
+        <a href="#keunggulan">Keunggulan</a>
+        <a href="#proses">Proses</a>
+        <a href="#lokasi">Lokasi</a>
+        <a href="#kontak" class="nav__cta btn btn--sm">Hubungi Kami</a>
+      </nav>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__copy reveal">
+          <span class="pill"><span class="dot"></span> Peternakan Ayam Petelur · Ciamis</span>
+          <h1 class="hero__title">
+            Telur Segar,<br />
+            <span class="grad">Setiap Pagi.</span>
+          </h1>
+          <p class="hero__sub">
+            Dara Poultry merawat lebih dari <strong>3.000 ekor ayam petelur</strong> yang
+            menghasilkan telur segar berkualitas setiap hari — langsung dari kandang
+            kami ke dapur Anda. Kami juga menyediakan <strong>pakan ternak</strong> terbaik.
+          </p>
+          <div class="hero__actions">
+            <a href="#kontak" class="btn btn--primary">Pesan Telur Sekarang
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#produk" class="btn btn--ghost">Lihat Produk</a>
+          </div>
+
+          <div class="hero__stats">
+            <div class="hstat"><b class="count" data-target="3000" data-suffix="+">0</b><span>Ayam Petelur</span></div>
+            <div class="hstat"><b class="count" data-target="2800" data-suffix="+">0</b><span>Telur / Hari</span></div>
+            <div class="hstat"><b>100<span class="pct">%</span></b><span>Telur Segar</span></div>
+          </div>
+        </div>
+
+        <div class="hero__art reveal" aria-hidden="true">
+          <div class="art-card art-card--main">
+            <svg viewBox="0 0 320 320" class="hen-illustration">
+              <!-- sun -->
+              <circle cx="255" cy="70" r="42" fill="#FFE39A"/>
+              <circle cx="255" cy="70" r="30" fill="#FFD25E"/>
+              <!-- ground -->
+              <path d="M0 250 Q160 220 320 250 L320 320 L0 320 Z" fill="#CDE7B0"/>
+              <path d="M0 268 Q160 244 320 268 L320 320 L0 320 Z" fill="#B6DA93"/>
+              <!-- hen body -->
+              <ellipse cx="150" cy="196" rx="78" ry="62" fill="#fff"/>
+              <ellipse cx="150" cy="196" rx="78" ry="62" fill="url(#body)" opacity=".25"/>
+              <!-- tail -->
+              <path d="M225 165 q46 -12 56 22 q-30 6 -44 -2 q22 14 18 40 q-30 -6 -40 -30 Z" fill="#F4A63B"/>
+              <!-- head -->
+              <circle cx="92" cy="150" r="34" fill="#fff"/>
+              <!-- comb -->
+              <path d="M74 122 q6 -18 18 -14 q4 -16 18 -8 q10 -10 18 4 q-6 20 -26 22 q-14 4 -28 -4 Z" fill="#E8543B"/>
+              <!-- beak -->
+              <path d="M60 150 l-22 6 l20 12 Z" fill="#F5B301"/>
+              <!-- wattle -->
+              <path d="M64 168 q-6 16 4 22 q10 -4 8 -20 Z" fill="#E8543B"/>
+              <!-- eye -->
+              <circle cx="86" cy="142" r="5.5" fill="#2A2118"/>
+              <circle cx="88" cy="140" r="1.8" fill="#fff"/>
+              <!-- wing -->
+              <path d="M150 175 q40 6 44 46 q-34 8 -54 -14 q-6 -22 10 -32 Z" fill="#F4C95B" opacity=".85"/>
+              <!-- legs -->
+              <path d="M132 254 l0 26 M120 288 h24" stroke="#F5B301" stroke-width="5" stroke-linecap="round"/>
+              <path d="M170 254 l0 26 M158 288 h24" stroke="#F5B301" stroke-width="5" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#F5B301"/><stop offset="1" stop-color="#F4A63B"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="float-card float-card--egg">
+            <span class="fc-emoji" aria-hidden="true">🥚</span>
+            <div><b>Telur Grade A</b><small>Dipetik hari ini</small></div>
+          </div>
+          <div class="float-card float-card--leaf">
+            <span class="fc-emoji" aria-hidden="true">🌾</span>
+            <div><b>Pakan Ternak</b><small>Nutrisi lengkap</small></div>
+          </div>
+          <span class="blob blob--1" aria-hidden="true"></span>
+          <span class="blob blob--2" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TRUST MARQUEE ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Telur Segar Setiap Hari</span><i>·</i>
+        <span>Pakan Ternak Berkualitas</span><i>·</i>
+        <span>3.000+ Ayam Petelur</span><i>·</i>
+        <span>Harga Peternak</span><i>·</i>
+        <span>Antar ke Rumah</span><i>·</i>
+        <span>Telur Segar Setiap Hari</span><i>·</i>
+        <span>Pakan Ternak Berkualitas</span><i>·</i>
+        <span>3.000+ Ayam Petelur</span><i>·</i>
+        <span>Harga Peternak</span><i>·</i>
+        <span>Antar ke Rumah</span><i>·</i>
+      </div>
+    </div>
+
+    <!-- ===== TENTANG ===== -->
+    <section class="section" id="tentang">
+      <div class="container about">
+        <div class="about__media reveal">
+          <div class="about__frame">
+            <svg viewBox="0 0 400 340" class="scene">
+              <rect width="400" height="340" rx="24" fill="#FBEFD6"/>
+              <!-- sky -->
+              <rect width="400" height="200" rx="24" fill="#EAF6DC"/>
+              <circle cx="320" cy="60" r="34" fill="#FFD25E"/>
+              <!-- hills -->
+              <path d="M0 210 Q120 150 240 200 T400 190 L400 340 L0 340Z" fill="#B6DA93"/>
+              <path d="M0 250 Q140 210 300 245 T400 240 L400 340 L0 340Z" fill="#8FC46B"/>
+              <!-- barn -->
+              <g transform="translate(70 150)">
+                <rect x="0" y="40" width="120" height="80" rx="6" fill="#C6603F"/>
+                <path d="M-8 44 L60 6 L128 44 Z" fill="#A94E31"/>
+                <rect x="46" y="72" width="28" height="48" rx="3" fill="#F7E6C4"/>
+                <rect x="14" y="60" width="22" height="20" rx="3" fill="#F7E6C4"/>
+                <rect x="84" y="60" width="22" height="20" rx="3" fill="#F7E6C4"/>
+              </g>
+              <!-- hens -->
+              <g transform="translate(240 235)">
+                <ellipse cx="0" cy="0" rx="26" ry="20" fill="#fff"/>
+                <circle cx="-22" cy="-10" r="12" fill="#fff"/>
+                <path d="M-30 -20 q3 -8 8 -6 q3 -7 8 -2 q-3 9 -12 10Z" fill="#E8543B"/>
+                <path d="M-34 -10 l-8 3 l7 4Z" fill="#F5B301"/>
+                <circle cx="-24" cy="-12" r="2.2" fill="#2A2118"/>
+              </g>
+              <g transform="translate(300 255) scale(.8)">
+                <ellipse cx="0" cy="0" rx="26" ry="20" fill="#fff"/>
+                <circle cx="-22" cy="-10" r="12" fill="#fff"/>
+                <path d="M-30 -20 q3 -8 8 -6 q3 -7 8 -2 q-3 9 -12 10Z" fill="#E8543B"/>
+                <path d="M-34 -10 l-8 3 l7 4Z" fill="#F5B301"/>
+                <circle cx="-24" cy="-12" r="2.2" fill="#2A2118"/>
+              </g>
+            </svg>
+          </div>
+          <div class="about__badge">
+            <b>Est.</b>
+            <span>Peternakan<br/>Keluarga</span>
+          </div>
+        </div>
+
+        <div class="about__copy reveal">
+          <span class="eyebrow">Tentang Kami</span>
+          <h2>Peternakan keluarga yang tumbuh bersama kepercayaan Anda</h2>
+          <p>
+            <strong>Dara Poultry</strong> adalah peternakan ayam petelur yang berlokasi di
+            Ciamis, Jawa Barat. Dengan lebih dari <strong>3.000 ekor ayam petelur</strong>,
+            kami berkomitmen menghadirkan telur segar berkualitas untuk keluarga,
+            warung, toko, dan pelaku usaha kuliner di sekitar kami.
+          </p>
+          <p>
+            Selain telur, kami juga melayani penjualan <strong>pakan ternak</strong> berkualitas
+            untuk membantu sesama peternak menjaga produktivitas dan kesehatan ternak mereka.
+          </p>
+          <ul class="ticklist">
+            <li>Telur dipanen dan disortir setiap hari</li>
+            <li>Ayam dirawat dengan pakan bergizi &amp; kandang bersih</li>
+            <li>Melayani pembelian eceran maupun partai besar</li>
+          </ul>
+          <a href="#produk" class="btn btn--primary btn--sm">Jelajahi Produk Kami</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS BAND ===== -->
+    <section class="statsband">
+      <div class="container statsband__grid">
+        <div class="sb reveal"><b class="count" data-target="3000" data-suffix="+">0</b><span>Ekor Ayam Petelur</span></div>
+        <div class="sb reveal"><b class="count" data-target="2800" data-suffix="+">0</b><span>Butir Telur / Hari</span></div>
+        <div class="sb reveal"><b class="count" data-target="7" data-suffix=" Hari">0</b><span>Panen Seminggu</span></div>
+        <div class="sb reveal"><b class="count" data-target="100" data-suffix="%">0</b><span>Segar &amp; Terjamin</span></div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUK ===== -->
+    <section class="section" id="produk">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Produk Kami</span>
+          <h2>Segar dari kandang, siap untuk Anda</h2>
+          <p class="section__lead">Kami menyediakan produk unggulan dengan kualitas terjaga dan harga bersahabat.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="card__ico ic-egg" aria-hidden="true">🥚</div>
+            <h3>Telur Ayam Segar</h3>
+            <p>Telur konsumsi segar dipanen setiap hari, disortir per ukuran, dengan cangkang bersih dan kualitas Grade A.</p>
+            <span class="card__tag">Terlaris</span>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__ico ic-feed" aria-hidden="true">🌾</div>
+            <h3>Pakan Ternak</h3>
+            <p>Pakan ternak berkualitas dengan nutrisi seimbang untuk menjaga produktivitas dan kesehatan ayam serta unggas Anda.</p>
+            <span class="card__tag card__tag--green">Nutrisi Lengkap</span>
+          </article>
+
+          <article class="card reveal">
+            <div class="card__ico ic-box" aria-hidden="true">📦</div>
+            <h3>Grosir &amp; Partai Besar</h3>
+            <p>Pasokan telur rutin untuk warung, toko, pedagang, dan usaha kuliner dengan harga khusus peternak.</p>
+            <span class="card__tag card__tag--brown">Harga Grosir</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== KEUNGGULAN ===== -->
+    <section class="section section--tint" id="keunggulan">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Kenapa Dara Poultry</span>
+          <h2>Alasan pelanggan memercayai kami</h2>
+        </div>
+
+        <div class="features">
+          <div class="feat reveal">
+            <div class="feat__ico">🐣</div>
+            <h4>Selalu Segar</h4>
+            <p>Telur dipanen setiap hari langsung dari kandang, bukan stok lama.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="feat__ico">💛</div>
+            <h4>Kualitas Terjaga</h4>
+            <p>Disortir dan dibersihkan, hanya telur terbaik yang sampai ke tangan Anda.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="feat__ico">🏷️</div>
+            <h4>Harga Peternak</h4>
+            <p>Langsung dari peternak tanpa perantara — harga jujur dan bersaing.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="feat__ico">🚚</div>
+            <h4>Siap Antar</h4>
+            <p>Layanan pengantaran untuk area sekitar, pesanan rutin lebih praktis.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="feat__ico">🌾</div>
+            <h4>Pakan Lengkap</h4>
+            <p>Sekaligus penyedia pakan ternak untuk kebutuhan peternak lain.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="feat__ico">🤝</div>
+            <h4>Terpercaya</h4>
+            <p>Peternakan keluarga yang mengutamakan kepercayaan dan pelayanan.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROSES ===== -->
+    <section class="section" id="proses">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Dari Kandang ke Meja Anda</span>
+          <h2>Proses yang menjaga kesegaran</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="tl reveal">
+            <span class="tl__num">01</span>
+            <h4>Perawatan Ayam</h4>
+            <p>3.000+ ayam petelur dirawat dengan pakan bergizi di kandang yang bersih dan sehat.</p>
+          </div>
+          <div class="tl reveal">
+            <span class="tl__num">02</span>
+            <h4>Panen Harian</h4>
+            <p>Telur dikumpulkan setiap hari untuk memastikan tingkat kesegaran yang maksimal.</p>
+          </div>
+          <div class="tl reveal">
+            <span class="tl__num">03</span>
+            <h4>Sortir &amp; Bersih</h4>
+            <p>Telur disortir berdasarkan ukuran dan kualitas, lalu dibersihkan dengan hati-hati.</p>
+          </div>
+          <div class="tl reveal">
+            <span class="tl__num">04</span>
+            <h4>Siap Diantar</h4>
+            <p>Dikemas rapi dan siap diambil atau diantar langsung ke pelanggan.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA STRIP ===== -->
+    <section class="ctastrip">
+      <div class="container ctastrip__inner reveal">
+        <div>
+          <h2>Butuh telur segar atau pakan ternak?</h2>
+          <p>Hubungi kami sekarang untuk pemesanan harian, mingguan, atau partai besar.</p>
+        </div>
+        <a href="#kontak" class="btn btn--dark">Hubungi Kami</a>
+      </div>
+    </section>
+
+    <!-- ===== LOKASI & KONTAK ===== -->
+    <section class="section" id="lokasi">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Lokasi &amp; Kontak</span>
+          <h2>Kunjungi peternakan kami</h2>
+          <p class="section__lead">Dara Poultry — Jual Pakan Ternak, Ciamis, Jawa Barat.</p>
+        </div>
+
+        <div class="contact" id="kontak">
+          <div class="contact__info reveal">
+            <div class="ci">
+              <div class="ci__ico">📍</div>
+              <div><b>Alamat</b><p>Ciamis, Jawa Barat, Indonesia<br/><small>Dara Poultry — Jual Pakan Ternak</small></p></div>
+            </div>
+            <div class="ci">
+              <div class="ci__ico">🕘</div>
+              <div><b>Jam Buka</b><p>Setiap hari · 07.00 – 17.00 WIB</p></div>
+            </div>
+            <div class="ci">
+              <div class="ci__ico">🥚</div>
+              <div><b>Produk</b><p>Telur ayam segar &amp; pakan ternak</p></div>
+            </div>
+            <div class="contact__actions">
+              <a class="btn btn--primary" href="https://maps.app.goo.gl/uAfdr142Jt6zWYMS9" target="_blank" rel="noopener">
+                Buka di Google Maps
+              </a>
+              <a class="btn btn--ghost" href="#hero">Kembali ke Atas</a>
+            </div>
+          </div>
+
+          <div class="contact__map reveal">
+            <div class="map-fallback" aria-hidden="true">
+              <span class="map-pin">📍</span>
+              <b>Dara Poultry</b>
+              <span>Ciamis, Jawa Barat</span>
+              <a class="btn btn--primary btn--sm" href="https://maps.app.goo.gl/uAfdr142Jt6zWYMS9" target="_blank" rel="noopener">Buka Peta</a>
+            </div>
+            <iframe
+              title="Lokasi Dara Poultry di Google Maps"
+              src="https://maps.google.com/maps?q=-7.3374117,108.3909399&z=16&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#hero" class="brand brand--light">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="30" height="30">
+              <ellipse cx="24" cy="27" rx="15" ry="19" fill="#F5B301"/>
+              <ellipse cx="19" cy="20" rx="4.5" ry="6" fill="#fff" opacity=".6"/>
+            </svg>
+          </span>
+          <span class="brand__text">Dara<span>Poultry</span></span>
+        </a>
+        <p>Peternakan ayam petelur &amp; penyedia pakan ternak di Ciamis. Telur segar setiap hari, langsung dari peternak.</p>
+      </div>
+
+      <div class="footer__col">
+        <h5>Navigasi</h5>
+        <a href="#tentang">Tentang</a>
+        <a href="#produk">Produk</a>
+        <a href="#keunggulan">Keunggulan</a>
+        <a href="#lokasi">Lokasi</a>
+      </div>
+
+      <div class="footer__col">
+        <h5>Produk</h5>
+        <a href="#produk">Telur Ayam Segar</a>
+        <a href="#produk">Pakan Ternak</a>
+        <a href="#produk">Grosir &amp; Partai Besar</a>
+      </div>
+
+      <div class="footer__col">
+        <h5>Kontak</h5>
+        <a href="https://maps.app.goo.gl/uAfdr142Jt6zWYMS9" target="_blank" rel="noopener">Google Maps</a>
+        <span>Ciamis, Jawa Barat</span>
+        <span>07.00 – 17.00 WIB</span>
+      </div>
+    </div>
+    <div class="footer__bar">
+      <div class="container footer__barin">
+        <span>© <span id="year"></span> Dara Poultry. Semua hak dilindungi.</span>
+        <span>Dibuat dengan 💛 untuk peternak &amp; keluarga Indonesia.</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#kontak" class="fab" aria-label="Hubungi Dara Poultry">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <span>Pesan</span>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
