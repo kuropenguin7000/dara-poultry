@@ -98,7 +98,7 @@ firebase deploy --only hosting             # publish
 firebase deploy --only hosting --dry-run   # validate without publishing
 ```
 
-### Two Firebase gotchas, both verified
+### Firebase gotchas, all verified against the live site
 
 **1. The ignore list must include `**/.*/**`.**
 The stock list `firebase init` generates (`["firebase.json", "**/.*", "**/node_modules/**"]`)
@@ -117,11 +117,25 @@ console.log(listFiles(cfg.public, cfg.ignore));
 
 It should print exactly: `index.html`, `scene.js`, `script.js`, `styles.css`.
 
-**2. Custom headers don't apply in the local emulator on Windows.**
+**2. `*.md` is ignored on purpose.** This file and `README.md` are internal docs;
+without that rule they get served publicly (e.g. `/CLAUDE.md`). Any new
+non-site file at the repo root needs an ignore entry, and the check above is
+how you confirm it.
+
+**3. The homepage needs its own `Cache-Control` header block.**
+`cleanUrls` serves the homepage at `/`, and the `**/*.@(html)` glob matches the
+request path — which is `/`, not `/index.html`. Without a separate block whose
+`source` is `/`, the homepage silently falls back to Firebase's default
+`max-age=3600`, meaning a deploy can take an hour to reach returning visitors.
+Verify with `curl -sI https://dara-poultry.web.app/ | grep -i cache-control`;
+it must say `max-age=0, must-revalidate`.
+
+**4. Custom headers don't apply in the local emulator on Windows.**
 `glob-slasher` normalizes patterns with the platform separator, yielding `\**`
 instead of `/**`, which minimatch can't match. So `curl localhost:5000` shows no
 `Cache-Control` even though the config is correct — real Hosting applies headers
-at the CDN. Don't "fix" working header config based on emulator output.
+at the CDN. Don't "fix" working header config based on emulator output; check
+the deployed URL instead.
 
 ## Gotchas
 

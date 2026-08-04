@@ -7,13 +7,22 @@
       "**/.*/**",
       "**/node_modules/**",
       "server.js",
-      "README.md"
+      "**/*.md"
     ],
     "cleanUrls": true,
     "trailingSlash": false,
     "headers": [
       {
         "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/",
         "headers": [
           {
             "key": "Cache-Control",

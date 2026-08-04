@@ -77,12 +77,22 @@ firebase emulators:start --only hosting   # http://localhost:5000
 
 ### File yang di-deploy
 Hanya empat file situs yang diunggah — `index.html`, `styles.css`, `script.js`,
-dan `scene.js`. Sisanya (`.git/`, `.claude/`, `server.js`, `README.md`) dikecualikan
+dan `scene.js`. Sisanya (`.git/`, `.claude/`, `server.js`, `*.md`) dikecualikan
 lewat daftar `ignore` di `firebase.json`.
+
+Untuk memastikan file apa saja yang akan terunggah:
+```bash
+firebase deploy --only hosting --dry-run
+```
+Perhatikan baris `found N files` saat deploy — jumlahnya harus **4**. Bila
+bertambah, ada file baru yang belum masuk daftar `ignore`.
 
 > **Penting:** daftar `ignore` harus memuat `**/.*/**`, bukan hanya `**/.*`.
 > Pola `**/.*` hanya cocok untuk segmen terakhir yang diawali titik, sehingga
 > isi folder `.git/` tetap ikut terunggah dan riwayat repository bisa diakses publik.
+
+> **Penting:** `*.md` sengaja dikecualikan. Tanpa itu, `README.md` dan `CLAUDE.md`
+> ikut tersaji publik di `https://dara-poultry.web.app/README.md`.
 
 ### Alternatif hosting statis lain
 - **Netlify** / **Vercel** — tarik-lepas folder atau hubungkan repo
