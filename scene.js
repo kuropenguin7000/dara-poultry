@@ -107,6 +107,9 @@ function init(canvas) {
       phase: rand() * Math.PI * 2,
       bob: 0.09 + rand() * 0.12,
       spin: (hero ? 0.16 : 0.10 + rand() * 0.28) * (rand() > 0.5 ? 1 : -1),
+      // Radians this egg turns over one full page scroll, on top of its
+      // idle spin — so scrolling visibly drives rotation, not just position.
+      spinScroll: (hero ? 3.2 : 2.4 + rand() * 5.6) * (rand() > 0.5 ? 1 : -1),
       tilt: (rand() - 0.5) * 0.7,
       layouts: null, // filled by buildLayouts()
       pos: new THREE.Vector3(),
@@ -179,12 +182,24 @@ function init(canvas) {
   const clock = new THREE.Clock();
   let progress = 0;        // damped scroll progress, 0..1
   let targetProgress = 0;  // raw scroll progress
+  let svel = 0;            // damped signed scroll velocity, progress units/sec
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
   let running = false;
   let rafId = 0;
 
+  /* Eggs shy away from the cursor. Radius is measured in aspect-corrected
+     NDC, so the falloff is a circle on screen rather than an ellipse.
+     Touch pointers are excluded — with no cursor to react to, a resting
+     pointer at the origin would shove the field apart from the centre. */
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const REPEL_R = 0.55;
+  const REPEL_FORCE = 0.75;
+  let pointerActive = false;
+  let repelAmt = 0; // damped, so the field eases back when the cursor leaves
+
   const tmpA = new THREE.Vector3();
   const tmpB = new THREE.Vector3();
+  const tmpC = new THREE.Vector3();
 
   function scrollProgress() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -200,30 +215,75 @@ function init(canvas) {
 
   function frame(elapsed, dt) {
     // Frame-rate independent damping — the cinematic "scrub" lag.
+    const prev = progress;
     progress += (targetProgress - progress) * (1 - Math.exp(-dt * 5));
     pointer.x += (pointer.tx - pointer.x) * (1 - Math.exp(-dt * 4));
     pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt * 4));
+    repelAmt += ((canHover && pointerActive ? 1 : 0) - repelAmt) * (1 - Math.exp(-dt * 4));
 
-    for (const egg of eggs) {
-      layoutAt(progress, egg.pos, egg.layouts);
-      egg.mesh.position.set(
-        egg.pos.x + Math.cos(elapsed * 0.45 + egg.phase) * 0.10,
-        egg.pos.y + Math.sin(elapsed * 0.60 + egg.phase) * egg.bob,
-        egg.pos.z
-      );
-      egg.mesh.rotation.y = elapsed * egg.spin + egg.phase;
-      egg.mesh.rotation.z = egg.tilt + Math.sin(elapsed * 0.4 + egg.phase) * 0.09;
-    }
+    /* How hard the page is being scrolled, signed, in progress units per
+       second. Damped off the already-damped progress, so it stays smooth.
+       Everything that reacts to scroll *speed* rather than scroll
+       *position* reads this. */
+    const inst = dt > 0 ? THREE.MathUtils.clamp((progress - prev) / dt, -1.2, 1.2) : 0;
+    svel += (inst - svel) * (1 - Math.exp(-dt * 6));
+    const rush = Math.min(Math.abs(svel) * 2.0, 1);
 
+    /* ---- Camera first: the eggs project through its matrices below ---- */
     layoutAt(progress, tmpA, camPath);
     // Narrow viewports need the camera further back to keep the field clear.
     const aspect = camera.aspect;
     tmpA.z *= THREE.MathUtils.clamp(1.5 / aspect, 1, 1.6);
+    tmpA.z += rush * 0.7; // eases back when the page is moving fast
     camera.position.copy(tmpA);
     camera.lookAt(tmpB.set(pointer.x * 0.6, pointer.y * 0.4, 0));
+    camera.rotateZ(-svel * 0.07); // a touch of roll into the scroll direction
 
     group.rotation.y = pointer.x * 0.10;
     group.rotation.x = -pointer.y * 0.06;
+
+    // project() needs both of these current; the renderer would only refresh
+    // them after we have already finished placing the eggs.
+    camera.updateMatrixWorld();
+    camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
+    group.updateMatrixWorld();
+
+    // The pointer listener measures y downward; NDC counts it upward.
+    const px = pointer.x;
+    const py = -pointer.y;
+
+    for (const egg of eggs) {
+      layoutAt(progress, egg.pos, egg.layouts);
+      let x = egg.pos.x + Math.cos(elapsed * 0.45 + egg.phase) * 0.10;
+      let y = egg.pos.y + Math.sin(elapsed * 0.60 + egg.phase) * egg.bob;
+
+      if (repelAmt > 0.002) {
+        // Test where the egg actually lands on screen — through the group
+        // transform, which the pointer parallax has already rotated.
+        tmpC.set(x, y, egg.pos.z).applyMatrix4(group.matrixWorld).project(camera);
+        const dx = (tmpC.x - px) * aspect;
+        const dy = tmpC.y - py;
+        const d = Math.hypot(dx, dy);
+        if (d < REPEL_R) {
+          const f = 1 - d / REPEL_R;
+          // NDC x scales with aspect, so dx is already in the right units
+          // to become a world-space nudge.
+          const push = (f * f * REPEL_FORCE * repelAmt) / (d || 1e-4);
+          x += dx * push;
+          y += dy * push;
+        }
+      }
+
+      egg.mesh.position.set(x, y, egg.pos.z);
+      egg.mesh.rotation.y = elapsed * egg.spin + egg.phase + progress * egg.spinScroll;
+      egg.mesh.rotation.z = egg.tilt + Math.sin(elapsed * 0.4 + egg.phase) * 0.09;
+
+      // Volume-preserving stretch along the egg's own long axis: reads as
+      // speed, without any egg appearing to change size.
+      const st = 1 + rush * (egg.hero ? 0.13 : 0.22);
+      const lat = egg.scale / Math.sqrt(st);
+      egg.mesh.scale.set(lat, egg.scale * st, lat);
+    }
 
     renderer.render(scene, camera);
   }
@@ -276,9 +336,19 @@ function init(canvas) {
       (e) => {
         pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
         pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+        // Jump to the cursor the first time it appears rather than sweeping
+        // the whole field across from the centre.
+        if (!pointerActive) {
+          pointer.x = pointer.tx;
+          pointer.y = pointer.ty;
+        }
+        pointerActive = e.pointerType !== "touch";
       },
       { passive: true }
     );
+
+    window.addEventListener("pointerleave", () => { pointerActive = false; }, { passive: true });
+    window.addEventListener("blur", () => { pointerActive = false; });
 
     // Don't burn GPU on a background tab.
     document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));

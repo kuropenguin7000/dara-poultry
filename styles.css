@@ -112,12 +112,73 @@ dl, dd, dt { margin: 0; }
 .skip-link:focus-visible { transform: translateY(0); }
 
 /* ============================================================
+   BACKGROUND VIDEO — the deepest layer, under the egg field
+   ------------------------------------------------------------
+   Stacking order for the whole page, bottom to top:
+     0  .stage-media   sunrise video loop
+     1  .stage         WebGL egg field
+     2  .stage-veil    cream wash + vignette
+     3  main, .footer  content
+   ============================================================ */
+.stage-media {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .6s var(--ease-out);
+}
+
+/* Same contract as body.has-3d: the layer is only revealed once script.js
+   has decided there is something to show — a decoding video, or the poster
+   still for reduced-motion and data-saver visitors. If the files 404 or
+   autoplay is refused, the class is never set and the page keeps its plain
+   cream background rather than flashing a black rectangle. */
+body.has-bg-media .stage-media { opacity: var(--media-op, 1); }
+
+.stage-media__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The 1.06 scale is headroom for --media-shift (scroll parallax) so the
+     translate can never expose an edge. */
+  transform: translate3d(0, var(--media-shift, 0px), 0) scale(1.06);
+}
+
+/* Portrait phones crop a 16:9 source hard. Bias the framing right-of-centre
+   so the sun and its rays stay in shot instead of being cut away. */
+@media (max-aspect-ratio: 1/1) {
+  .stage-media__video { object-position: 68% 42%; }
+}
+
+/* The video's own cream scrim. Kept here rather than in .stage-veil so the
+   no-video path kicks back to exactly the veil it had before. */
+.stage-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Heavy over the copy column on the left, nearly clear on the right where
+     nothing but the egg field sits — that is where the loop earns its bytes. */
+  background:
+    linear-gradient(104deg, rgba(253, 247, 236, .74) 0%, rgba(253, 247, 236, .26) 46%, rgba(253, 247, 236, .06) 100%),
+    linear-gradient(180deg, rgba(253, 247, 236, .24), transparent 36%, rgba(253, 247, 236, .38));
+}
+@media (max-width: 900px) {
+  .stage-media::after {
+    background: linear-gradient(180deg, rgba(253, 247, 236, .60), rgba(253, 247, 236, .74));
+  }
+}
+
+/* ============================================================
    3D STAGE — fixed canvas behind all content
    ============================================================ */
 .stage {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   opacity: 0;
   transition: opacity .5s var(--ease-out);
@@ -133,7 +194,7 @@ body.has-3d .stage.intro { transition: opacity 1.1s var(--ease-out); }
 .stage-veil {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   background:
     linear-gradient(100deg, rgba(253, 247, 236, .80) 0%, rgba(253, 247, 236, .34) 36%, transparent 58%),
@@ -147,7 +208,7 @@ body.has-3d .stage.intro { transition: opacity 1.1s var(--ease-out); }
 /* Everything else stacks above the stage.
    Note: keep fixed-position elements (.nav, .fab, .skip-link) out of this
    rule — they set their own position and z-index. */
-main, .footer { position: relative; z-index: 2; }
+main, .footer { position: relative; z-index: 3; }
 
 /* ---------- Typography ---------- */
 h1, h2, h3, h4, h5 {
@@ -722,4 +783,7 @@ body.has-3d .hero__art { display: none; }
   .reveal { opacity: 1; transform: none; }
   .marquee__track { animation: none; }
   .art-card { animation: none; }
+  /* script.js never loads a video source in this mode, so the poster still
+     is what shows. Pin the scroll parallax so it cannot drift either. */
+  .stage-media__video { transform: none; }
 }

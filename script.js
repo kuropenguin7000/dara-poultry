@@ -8,18 +8,136 @@
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---- Sticky nav + 3D field strength on scroll ----
+  /* ============================================================
+     Background video
+     ------------------------------------------------------------
+     The sunrise loop is atmosphere for the landing area only. It fades
+     out across the first one and a half viewports and is paused once
+     invisible, so it costs no decode time while someone reads the rest
+     of the page. Resolution is picked here rather than with <source
+     media> because that attribute is only evaluated once, at load.
+     ============================================================ */
+  const bgVideo = document.getElementById("bgVideo");
+  const MEDIA_FADE = 1.5; // viewports of scroll before the loop is gone
+
+  let videoWanted = false; // false => poster-only or failed, never call play()
+  let mediaVisible = true;
+
+  const showMediaLayer = () => document.body.classList.add("has-bg-media");
+
+  const playVideo = () => {
+    if (!videoWanted) return;
+    const p = bgVideo.play();
+    // Autoplay can still be refused (low-power mode). The poster is a
+    // perfectly good static backdrop, so reveal the layer regardless.
+    if (p && p.catch) p.catch(showMediaLayer);
+  };
+
+  if (bgVideo) {
+    const conn = navigator.connection || {};
+    const frugal = conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || "");
+
+    if (reduceMotion || frugal) {
+      // Poster only — not a single video byte is requested.
+      showMediaLayer();
+    } else {
+      const base = window.innerWidth < 900 ? "media/hero-loop-sm" : "media/hero-loop";
+      // WebM first: the VP9 encode is roughly half the bytes of its H.264 twin.
+      for (const ext of ["webm", "mp4"]) {
+        const s = document.createElement("source");
+        s.src = base + "." + ext;
+        s.type = ext === "webm" ? "video/webm" : "video/mp4";
+        bgVideo.appendChild(s);
+      }
+
+      bgVideo.addEventListener("playing", showMediaLayer, { once: true });
+      // Fires once the whole <source> list is exhausted. Fall back to the
+      // poster; if that is missing too the layer is simply empty, which
+      // leaves the plain cream background rather than a black rectangle.
+      bgVideo.addEventListener("error", () => {
+        videoWanted = false;
+        showMediaLayer();
+      }, { once: true });
+
+      videoWanted = true;
+      bgVideo.load();
+      // Don't start decoding into a tab nobody is looking at; the
+      // visibilitychange handler below starts it when the tab is shown.
+      if (!document.hidden) playVideo();
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) bgVideo.pause();
+      else if (mediaVisible) playVideo();
+    });
+  }
+
+  /* ---- Sticky nav + background strength on scroll ----
      The egg field is at full strength across the hero, then settles back
-     to a quieter backdrop so it never competes with body copy. */
+     to a quieter backdrop so it never competes with body copy. The video
+     behind it retreats further and faster, and stops entirely. */
   const nav = document.getElementById("nav");
   const stage = document.getElementById("stage");
+  const root = document.documentElement;
 
   const onScroll = () => {
     const y = window.scrollY;
+    const vh = Math.max(window.innerHeight, 1);
     nav.classList.toggle("scrolled", y > 20);
-    const t = Math.min(y / Math.max(window.innerHeight, 1), 1);
-    document.documentElement.style.setProperty("--stage-op", (1 - t * 0.55).toFixed(3));
+
+    const t = Math.min(y / vh, 1);
+    root.style.setProperty("--stage-op", (1 - t * 0.55).toFixed(3));
+
+    const mt = Math.min(y / (vh * MEDIA_FADE), 1);
+    root.style.setProperty("--media-op", (1 - mt * mt * (3 - 2 * mt)).toFixed(3));
+    root.style.setProperty("--media-shift", Math.min(y * 0.03, 34).toFixed(1) + "px");
+
+    if (bgVideo) {
+      const visible = mt < 0.995;
+      if (visible !== mediaVisible) {
+        mediaVisible = visible;
+        if (visible) playVideo();
+        else bgVideo.pause();
+      }
+    }
+
+    trackScrollSpeed(y);
   };
+
+  /* ---- Scroll speed nudges the loop along ----
+     Scrolling faster runs the ambient video slightly faster, which ties it
+     to the same gesture that drives the egg field. Damped in its own rAF so
+     a flick ramps rather than snaps. */
+  let lastY = window.scrollY;
+  let lastT = performance.now();
+  let rawSpeed = 0;
+  let speed = 0;
+  let speedRaf = 0;
+
+  function trackScrollSpeed(y) {
+    if (reduceMotion) return;
+    const now = performance.now();
+    rawSpeed = Math.min(Math.abs(y - lastY) / Math.max(now - lastT, 1), 4); // px/ms
+    lastY = y;
+    lastT = now;
+    if (!speedRaf) speedRaf = requestAnimationFrame(speedTick);
+  }
+
+  function speedTick() {
+    speed += (rawSpeed - speed) * 0.1;
+    rawSpeed *= 0.9; // decays on its own once scrolling stops
+    if (videoWanted && !bgVideo.paused) {
+      bgVideo.playbackRate = 1 + Math.min(speed, 3) * 0.22;
+    }
+    if (speed > 0.002) {
+      speedRaf = requestAnimationFrame(speedTick);
+    } else {
+      speed = 0;
+      speedRaf = 0;
+      if (videoWanted) bgVideo.playbackRate = 1;
+    }
+  }
+
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 

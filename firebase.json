@@ -7,6 +7,7 @@
       "**/.*/**",
       "**/node_modules/**",
       "server.js",
+      "tools/**",
       "**/*.md"
     ],
     "cleanUrls": true,
@@ -40,7 +41,7 @@
         ]
       },
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2)",
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2|mp4|webm)",
         "headers": [
           {
             "key": "Cache-Control",

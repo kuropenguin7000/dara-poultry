@@ -28,6 +28,28 @@
 
   <a href="#main" class="skip-link">Lompat ke konten utama</a>
 
+  <!-- ===== BACKGROUND VIDEO (deepest layer, under the egg field) =====
+       No src and no <source> here on purpose — script.js appends them
+       once it has picked a resolution, so nothing but the poster is
+       fetched for reduced-motion or data-saver visitors. That is also
+       why preload is "auto" rather than "none": with no source attached
+       there is nothing to preload anyway, and "none" left Chrome
+       declining to fetch at all once the sources did arrive. -->
+  <div class="stage-media" id="stageMedia" aria-hidden="true">
+    <video
+      class="stage-media__video"
+      id="bgVideo"
+      poster="media/hero-poster.webp"
+      muted
+      loop
+      autoplay
+      playsinline
+      preload="auto"
+      disablepictureinpicture
+      disableremoteplayback
+    ></video>
+  </div>
+
   <!-- ===== 3D STAGE (fixed, behind everything) ===== -->
   <div class="stage" id="stage" aria-hidden="true">
     <canvas id="scene"></canvas>

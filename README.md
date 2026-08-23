@@ -13,9 +13,12 @@ dimuat dari CDN lewat `importmap` untuk animasi 3D.
 ```
 index.html    → seluruh konten & struktur halaman
 styles.css    → desain, tema warna, efek kaca, dan responsif (mobile friendly)
-script.js     → menu mobile, animasi scroll, penghitung angka, tilt 3D kartu
+script.js     → menu mobile, animasi scroll, penghitung angka, tilt 3D kartu,
+                pengatur video latar
 scene.js      → adegan 3D (Three.js): ladang telur di latar belakang
 server.js     → server statis kecil untuk pratinjau lokal (opsional)
+media/        → video latar (2 ukuran × mp4/webm) + gambar poster
+tools/        → skrip pembuat video latar (tidak ikut di-deploy)
 ```
 
 ## Animasi 3D
@@ -32,10 +35,43 @@ Detail teknis:
 - Kekuatan latar 3D meredup saat pengguna scroll melewati hero agar tidak
   mengganggu keterbacaan teks.
 
+Interaksi saat scroll dan gerak kursor:
+- Posisi scroll ikut **memutar** setiap telur, bukan hanya memindahkannya.
+- **Kecepatan** scroll membuat telur sedikit memanjang, kamera mundur, dan
+  bidang pandang miring tipis — jadi terasa menyatu dengan gerakan jari.
+- Di perangkat dengan mouse, telur **menghindar** dari kursor.
+
 **Fallback otomatis** — halaman tetap utuh tanpa 3D:
 - Jika Three.js gagal dimuat atau WebGL tidak tersedia → ilustrasi 2D hero tampil.
 - Jika pengguna mengaktifkan *reduced motion* → adegan 3D dirender diam
   (tanpa animasi), dan seluruh animasi CSS dinonaktifkan.
+
+## Video latar
+Di lapisan paling belakang ada video **matahari terbit** yang berputar mulus
+(18 detik, tanpa suara). Video ini hanya menjadi suasana untuk area pembuka:
+saat pengguna scroll, video meredup hingga hilang di 1,5 layar pertama lalu
+**dijeda otomatis** supaya tidak memakan baterai dan kuota.
+
+Videonya **dibuat sendiri secara prosedural** — bukan stok video. Semua frame
+digambar lewat perhitungan di Node lalu di-encode dengan ffmpeg, jadi tidak ada
+aset berbayar dan hasilnya selalu sama setiap kali dibuat ulang:
+
+```bash
+node tools/make-hero-video.mjs             # buat ulang video (± 1 menit)
+node tools/make-hero-video.mjs --still 0   # simpan 1 frame sebagai PNG
+```
+Butuh **ffmpeg** terpasang di sistem.
+
+Hemat kuota — ukuran file dipilih otomatis oleh `script.js`:
+
+| Kondisi | Yang diunduh |
+| --- | --- |
+| Layar ≥ 900px | `hero-loop.webm` (333 KB) |
+| Layar < 900px | `hero-loop-sm.webm` (135 KB) |
+| *Reduced motion*, mode hemat data, atau jaringan 2g | hanya poster (8 KB) |
+
+Bila video gagal dimuat atau autoplay ditolak browser, gambar poster tetap
+tampil sebagai latar — halaman tidak pernah menampilkan kotak hitam.
 
 ## Menjalankan secara lokal
 Karena Three.js dimuat sebagai ES module, halaman perlu dibuka lewat HTTP
@@ -76,16 +112,21 @@ firebase emulators:start --only hosting   # http://localhost:5000
 > header hanya berdasarkan hasil emulator.
 
 ### File yang di-deploy
-Hanya empat file situs yang diunggah — `index.html`, `styles.css`, `script.js`,
-dan `scene.js`. Sisanya (`.git/`, `.claude/`, `server.js`, `*.md`) dikecualikan
-lewat daftar `ignore` di `firebase.json`.
+Sembilan file yang diunggah — `index.html`, `styles.css`, `script.js`,
+`scene.js`, dan lima aset di `media/`. Sisanya (`.git/`, `.claude/`,
+`server.js`, `tools/`, `*.md`) dikecualikan lewat daftar `ignore` di
+`firebase.json`.
 
 Untuk memastikan file apa saja yang akan terunggah:
 ```bash
 firebase deploy --only hosting --dry-run
 ```
-Perhatikan baris `found N files` saat deploy — jumlahnya harus **4**. Bila
+Perhatikan baris `found N files` saat deploy — jumlahnya harus **9**. Bila
 bertambah, ada file baru yang belum masuk daftar `ignore`.
+
+> **Penting:** `tools/` wajib dikecualikan. Isinya skrip pembuat video yang
+> hanya dipakai saat pengembangan; hasilnya (`media/`) yang ikut ter-deploy,
+> bukan skripnya.
 
 > **Penting:** daftar `ignore` harus memuat `**/.*/**`, bukan hanya `**/.*`.
 > Pola `**/.*` hanya cocok untuk segmen terakhir yang diawali titik, sehingga
